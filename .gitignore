@@ -1,0 +1,113 @@
+# Bitrix specific
+/bitrix/
+/local/
+/upload/
+/bitrixstack/
+/bx-site/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+.project
+.buildpath
+.settings/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+*~
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+/cache/
+/logs/
+/backup/
+*.backup
+*.bak
+
+# Environment and configs
+/.env
+.env.*
+*.local
+*.local.php
+/config.php
+/dbconn.php
+/settings.php
+/.access.php
+/bitrix/.settings.php
+/bitrix/php_interface/dbconn.php
+
+# Composer
+/vendor/
+composer.lock
+composer-bx.json
+composer.json.example
+
+# Secrets and credentials
+*.key
+*.pem
+*.crt
+*.csr
+*.p12
+*.pfx
+*.ovpn
+/secrets/
+/keys/
+/private/
+
+# Runtime
+/tmp/
+/sessions/
+/logs/
+/backup/
+/update/
+
+# Uploads and user content
+/upload/
+/images/upload/
+/files/
+/download/
+
+# Cache
+/cache/
+/bitrix/cache/
+/bitrix/managed_cache/
+/bitrix/stack_cache/
+/bitrix/html_pages/
+/bitrix/backup/
+/bitrix/tmp/
+
+# Environment specific
+/.htaccess
+/web.config
+/robots.txt
+/sitemap.xml
+/404.php
+/500.html
+
+# Development files
+*.dev.*
+*.test.*
+*.local.*
+/docker/
+/vagrant/
+/.vagrant/
+/docker-compose*.yml
+/Dockerfile*
+/Makefile
+/Gruntfile.js
+/gulpfile.js
+/package.json
+/package-lock.json
+/yarn.lock
+/node_modules/
+
+# Project specific - добавьте свои
+/test.php
+/Отчёты.docx
