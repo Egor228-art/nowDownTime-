@@ -5,6 +5,7 @@
 /bitrixstack/
 /bx-site/
 
+# Сохраняем шаблоны
 !/bitrix/templates/
 
 # System files
