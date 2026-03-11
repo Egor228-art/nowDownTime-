@@ -5,6 +5,8 @@
 /bitrixstack/
 /bx-site/
 
+!/bitrix/templates/
+
 # System files
 .DS_Store
 Thumbs.db
@@ -108,6 +110,43 @@ composer.json.example
 /yarn.lock
 /node_modules/
 
-# Project specific - добавьте свои
-/test.php
-/Отчёты.docx
+# Project specific
+# Раскомментируйте если НЕ хотите загружать эти файлы:
+test.php
+# /Отчёты.docx
+# /documentation/
+# /docs/
+
+# ДОПОЛНЕНИЯ:
+# Конфигурационные файлы
+*.config.php
+*.conf
+*.ini
+
+# Базы данных
+*.sql
+*.sqlite
+*.db
+
+# Архивы
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Логи PHP
+php_error.log
+xdebug.log
+
+# SSL сертификаты
+*.crt
+*.pem
+*.key
+*.csr
+
+# Временные файлы редакторов
+*~
+.*.swp
+.*.swo
+.*.swn
+.*.un~
