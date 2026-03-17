@@ -22,7 +22,6 @@
 }
 
 body {
-    padding-top: 160px;
     background-color: #f9fafc;
     color: #1e293b;
     line-height: 1.5;
@@ -328,6 +327,24 @@ body.bx-panel-minimized {
     animation: pulse 2s infinite;
 }
 
+.cart-link {
+    position: relative;
+    text-decoration: none;
+    color: #333;
+}
+
+.cart-counter {
+    position: absolute;
+    right: 12px;
+    background: #e74c3c;
+    color: white;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 15px;
+    min-width: 18px;
+    text-align: center;
+}
+
 @keyframes pulse {
     0% {
         box-shadow: 0 4px 15px rgba(147, 11, 11, 0.3);
@@ -395,7 +412,7 @@ body.bx-panel-minimized {
     align-items: center;
     gap: 8px;
     padding: 6px 12px 6px 8px;
-    background: #f8fafc;
+    background: #fcf8f8;
     border-radius: 40px;
     text-decoration: none;
     color: #1e293b;
@@ -404,7 +421,7 @@ body.bx-panel-minimized {
 }
 
 .user-profile:hover {
-    background: #f1f5f9;
+    background: #f9f1f1;
 }
 
 .user-avatar {
@@ -484,7 +501,7 @@ body.bx-panel-minimized {
 }
 
 .user-dropdown a:hover {
-    background: #f8fafc;
+    background: #fcf8f8;
 }
 
 .dropdown-divider {
@@ -695,6 +712,7 @@ body.bx-panel-minimized {
 
 /* ===== ГЛАВНЫЙ БАННЕР ===== */
 .hero {
+    margin-top: 160px;
     background: linear-gradient(135deg, var(--Gold) 0%, var(--DragonLight) 100%);
     color: white;
     padding: 60px 0;

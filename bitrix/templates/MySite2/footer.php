@@ -1,4 +1,14 @@
 <!-- ПОДВАЛ (как просил: лого, разделы, о нас, соцсети) -->
+<head>
+    <?php $APPLICATION->ShowHead(); ?>
+    <meta charset="<?= LANG_CHARSET ?>">
+    <title><?php $APPLICATION->ShowTitle() ?></title>
+    
+    <!-- Твои стили -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="<?=SITE_TEMPLATE_PATH?>/footer.css">
+</head>
+
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -17,7 +27,7 @@
                 </div>
 
                 <!-- Колонка 2: Разделы каталога (повтор подшапки) -->
-                <div class="footer-col">
+                <div class="footer-col" style="content: none;">
                     <h4>Каталог</h4>
                     <ul>
                         <li><a href="#"><i class="fas fa-dice-d20"></i> D&D</a></li>

@@ -212,7 +212,7 @@ elseif ($action == "getRegisterForm") {
         </button>
     </form>
     
-    <style>
+<style>
     .field-status {
         font-size: 12px;
         margin-top: 5px;
@@ -244,7 +244,7 @@ elseif ($action == "getRegisterForm") {
         margin-top: 5px;
         min-height: 18px;
     }
-    </style>
+</style>
 <?php
 }
 elseif ($action == "login") {
