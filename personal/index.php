@@ -576,6 +576,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && check_bitrix_sessid()) {
         </div>
     </div>
 </div>
+
 <script src="/personal/personal.js"></script>
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");

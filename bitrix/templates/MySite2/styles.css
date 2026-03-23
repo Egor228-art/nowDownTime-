@@ -5,6 +5,10 @@
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
+.bx-core-popup-menu {
+    z-index: 1000 !important;
+}
+
 :root {
     --DragonLight: #930b0b;
     --DragonDark: #6d1313;
@@ -73,7 +77,7 @@ body.bx-panel-fixed .nav-header {
 
 /* Корректировка отступа body */
 body.bx-panel-fixed {
-    padding-top: 219px !important; /* 39(admin) + 100(header) + 80(nav) */
+    margin-top: 170px !important; /* 39(admin) + 100(header) + 80(nav) */
 }
 
 /* Когда админ панель свернута */

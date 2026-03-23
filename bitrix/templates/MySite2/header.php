@@ -18,6 +18,24 @@ ini_set('display_errors', 1);?>
 <body>
 	<div id="panel"><? $APPLICATION->ShowPanel(); ?></div>
 
+    <?if (!$USER->IsAuthorized()):?>
+    <style>
+        body {
+            margin-top: 0 !important;
+            padding-top: 38px !important;
+        }
+    </style>
+    <?endif?>
+
+    <?if ($USER->IsAuthorized()):?>
+    <style>
+        body {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+    </style>
+    <?endif?>
+
     <!-- ШАПКА (первая линия) -->
     <div class="top-header">
         <div class="container">
@@ -150,20 +168,15 @@ ini_set('display_errors', 1);?>
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeAllModals()"></div>
     <script src="<?=SITE_TEMPLATE_PATH?>/javascript.js"></script>
     <script>
-window.updateCartCounter = function(force = false) {
-    console.log('🟡 updateCartCounter вызван' + (force ? ' (принудительно)' : ''));
-    
+window.updateCartCounter = function(force = false) {    
     // Если вызвано принудительно, сначала проверим, есть ли счетчик в DOM
     if (force) {
         let counters = document.querySelectorAll('.cart-counter');
-        console.log('🟡 Счетчиков до запроса:', counters.length);
         
         // Если счетчиков нет, но они должны быть — создадим временный
         if (counters.length === 0) {
-            console.log('🟡 Счетчики не найдены, ищем ссылку на корзину');
             const cartLink = document.querySelector('a[href*="cart"]');
             if (cartLink) {
-                console.log('🟡 Найдена ссылка на корзину, добавляем счетчик');
                 const newCounter = document.createElement('span');
                 newCounter.className = 'cart-counter';
                 newCounter.style.display = 'none';
@@ -174,21 +187,15 @@ window.updateCartCounter = function(force = false) {
     
     fetch('/ajax/add_to_cart.php?action=get&t=' + Date.now()) // Добавим timestamp чтобы избежать кеша
         .then(response => response.json())
-        .then(data => {
-            console.log('🟢 Данные корзины:', data);
-            
+        .then(data => {            
             if (data.success) {
                 // Ищем все элементы с классом cart-counter
                 let counters = document.querySelectorAll('.cart-counter');
-                console.log('🟡 Найдено счетчиков:', counters.length);
                 
                 if (counters.length === 0) {
-                    console.log('🔴 Счетчики не найдены! Пробуем создать...');
-                    
                     // Пробуем найти ссылку на корзину и добавить счетчик
                     const cartLinks = document.querySelectorAll('a[href*="cart"], a[href*="basket"]');
                     cartLinks.forEach(link => {
-                        console.log('🟡 Добавляем счетчик к ссылке:', link);
                         const newCounter = document.createElement('span');
                         newCounter.className = 'cart-counter';
                         newCounter.textContent = data.cart_count;
@@ -199,17 +206,6 @@ window.updateCartCounter = function(force = false) {
                     // Перечитываем счетчики
                     counters = document.querySelectorAll('.cart-counter');
                 }
-                
-                counters.forEach((counter, index) => {
-                    console.log(`🟡 Счетчик #${index}:`, counter);
-                    console.log(`🟡 Старое значение: "${counter.textContent}"`);
-                    
-                    counter.textContent = data.cart_count;
-                    counter.style.display = data.cart_count > 0 ? 'inline' : 'none';
-                    
-                    console.log(`🟡 Новое значение: "${counter.textContent}"`);
-                    console.log(`🟡 Display: ${counter.style.display}`);
-                });
             }
         })
         .catch(error => {
@@ -231,9 +227,43 @@ window.addEventListener('pageshow', function(event) {
     }
 });
 
-// Также обновляем каждые 5 секунд (на всякий случай)
-setInterval(function() {
-    console.log('Periodic cart update');
-    window.updateCartCounter();
-}, 5000);
+(function() {
+    // Функция для установки отступа
+    function setHeaderMargin() {
+        const topHeader = document.querySelector('.top-header');
+        const navHeader = document.querySelector('.nav-header');
+        
+        if (topHeader && navHeader) {
+            const headerHeight = topHeader.offsetHeight + navHeader.offsetHeight;
+            
+            // Устанавливаем и CSS-переменную, и прямой стиль для надежности
+            document.documentElement.style.setProperty('--header-height', headerHeight + 'px');
+            document.body.style.marginTop = headerHeight + 'px';
+            
+            console.log('Header margin set to:', headerHeight + 'px');
+            return true;
+        }
+        return false;
+    }
+    
+    // Пытаемся установить сразу
+    if (!setHeaderMargin()) {
+        // Если элементы еще не загружены - пробуем снова
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setHeaderMargin);
+        } else {
+            // Если DOM уже загружен, но элементов нет - ждем
+            setTimeout(setHeaderMargin, 50);
+        }
+    }
+    
+    // Страховка - проверяем через небольшие интервалы
+    let attempts = 0;
+    const interval = setInterval(function() {
+        attempts++;
+        if (setHeaderMargin() || attempts > 20) { // Максимум 20 попыток (1 секунда)
+            clearInterval(interval);
+        }
+    }, 50);
+})();
 </script>

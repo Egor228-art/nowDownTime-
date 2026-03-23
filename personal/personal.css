@@ -1121,7 +1121,7 @@ footer, .footer,
 
 /* Убеждаемся, что body не создает проблем */
 body {
-    padding-top: 0 !important;
+    padding-top: -100p !important;
     position: relative;
     margin: 0;
     padding: 0;
