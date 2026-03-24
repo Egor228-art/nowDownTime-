@@ -1401,36 +1401,69 @@ function applyPhysics() {
 function removeItem(item) {
     if (item.pendingRemoval) return;
     item.pendingRemoval = true;
-    if (item.element && item.element.parentNode) {
-        item.element.style.transition = 'opacity 0.2s, transform 0.2s';
-        item.element.style.opacity = '0';
-        item.element.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-            if (item.element && item.element.remove) item.element.remove();
-        }, 200);
-    }
-    totalPrice -= item.price;
-    updateBasketStats();
-    updateDiscount(totalPrice);
     
-    // ОБНОВЛЯЕМ СКРОЛЛЕР ПОСЛЕ УДАЛЕНИЯ
-    renderScrollItems();
+    console.log('🗑️ Удаляем 1 товар:', item.productId, item.name);
     
-    // Проверяем, остались ли еще товары этого типа
-    const remainingCount = items.filter(i => i.productId == item.productId && !i.pendingRemoval).length;
-    
-    // Если не осталось товаров этого типа, удаляем из cartProducts
-    if (remainingCount === 0) {
-        const index = cartProducts.findIndex(p => p.id == item.productId);
-        if (index !== -1) {
-            cartProducts.splice(index, 1);
-            console.log('Товар удален из cartProducts:', item.name);
+    // Отправляем запрос на удаление 1 единицы
+    fetch('/ajax/add_to_cart.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `action=remove&product_id=${item.productId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Ответ remove:', data);
+        
+        if (data.success) {
+            // Удаляем визуально 1 товар
+            if (item.element && item.element.parentNode) {
+                item.element.remove();
+            }
+            
+            totalPrice -= item.price;
+            updateBasketStats();
+            updateDiscount(totalPrice);
+            
+            // Удаляем из массива items
+            const index = items.findIndex(i => i.id === item.id);
+            if (index !== -1) items.splice(index, 1);
+            
+            // Проверяем, остались ли еще товары ЭТОГО ТИПА в физической корзине
+            const remainingItems = items.filter(i => i.productId == item.productId);
+            console.log(`Осталось товаров ${item.name} в физической корзине: ${remainingItems.length}`);
+            
+            // НЕ УДАЛЯЕМ из cartProducts, если в Битриксе еще есть товары
+            // Нужно проверить актуальное количество в Битриксе
+            fetch('/ajax/add_to_cart.php?action=get_full&t=' + Date.now())
+                .then(res => res.json())
+                .then(basketData => {
+                    const bitrixItem = basketData.items?.find(i => i.PRODUCT_ID == item.productId);
+                    const bitrixQuantity = bitrixItem?.QUANTITY || 0;
+                    
+                    console.log(`В Битриксе осталось: ${bitrixQuantity}`);
+                    
+                    if (bitrixQuantity === 0) {
+                        // Только если в Битриксе нет товара, удаляем из cartProducts
+                        const productIndex = cartProducts.findIndex(p => p.id == item.productId);
+                        if (productIndex !== -1) {
+                            cartProducts.splice(productIndex, 1);
+                            console.log(`Удален из cartProducts: ${item.name}`);
+                        }
+                    }
+                    
+                    renderScrollItems();
+                });
+        } else {
+            item.pendingRemoval = false;
+            showNotification('Ошибка удаления', 'error');
         }
-    }
-    
-    window.dispatchEvent(new CustomEvent('cartItemRemoved', { detail: { productId: item.id } }));
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        item.pendingRemoval = false;
+        showNotification('Ошибка соединения', 'error');
+    });
 }
-
 function updateBasketStats() {
     totalSpan.innerText = totalPrice.toLocaleString() + ' ₽';
     countSpan.innerText = items.length;
@@ -1537,46 +1570,30 @@ function escapeHtml(str) {
 }
 
 window.changeQuantity = function(productId, delta) {
-    console.log('changeQuantity вызван:', { productId, delta });
+    console.log('changeQuantity:', { productId, delta });
     
     const product = cartProducts.find(p => p.id == productId);
-    if (!product) {
-        console.log('Товар не найден:', productId);
-        return;
-    }
+    if (!product) return;
     
-    const currentQty = items.filter(i => i.productId == productId).length;
-    let newQty = currentQty + delta;
-    
-    console.log('Изменение количества:', { productId, currentQty, newQty, delta });
-    
-    if (delta === -999) {
-        // Полное удаление всех товаров этого типа
-        newQty = 0;
-    }
-    
-    newQty = Math.max(0, newQty);
-    
-    if (newQty > currentQty) {
-        // Добавляем нужное количество
-        const toAdd = newQty - currentQty;
-        for (let i = 0; i < toAdd; i++) {
-            createProduct({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                imageUrl: product.imageUrl
-            });
+    if (delta === 1) {
+        // Добавляем 1 товар
+        window.addProductToBasket({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            imageUrl: product.imageUrl
+        });
+    } else if (delta === -1) {
+        // Удаляем 1 товар
+        const itemToRemove = items.find(i => i.productId == productId && !i.pendingRemoval);
+        if (itemToRemove) {
+            removeItem(itemToRemove);
         }
-    } else if (newQty < currentQty) {
-        // Удаляем лишние
-        const toRemove = currentQty - newQty;
-        const itemsToRemove = items.filter(i => i.productId == productId).slice(0, toRemove);
+    } else if (delta === -999) {
+        // Удаляем ВСЕ товары этого типа
+        const itemsToRemove = items.filter(i => i.productId == productId && !i.pendingRemoval);
         itemsToRemove.forEach(item => removeItem(item));
     }
-    
-    // Обновляем отображение количества в скроллере
-    updateScrollItemQuantity(productId, newQty);
 };
 
 window.repeatOrder = repeatOrder;
@@ -2140,58 +2157,42 @@ function loadUserData() {
 }
 
 window.addProductToBasket = function(productData) {
-    console.log('addProductToBasket вызван с данными:', productData);
+    console.log('addProductToBasket вызван:', productData);
     
-    if (!productData || !productData.id) {
-        console.error('Нет данных товара или ID');
-        return false;
-    }
+    if (!productData || !productData.id) return false;
     
-    // Нормализуем данные
     const normalizedData = {
-        id: parseInt(productData.id) || productData.id,
-        name: productData.name || productData.NAME || 'Товар',
-        price: parseFloat(productData.price) || parseFloat(productData.PRICE) || 0,
-        imageUrl: productData.imageUrl || productData.IMAGE || productData.picture || null
+        id: parseInt(productData.id),
+        name: productData.name || 'Товар',
+        price: parseFloat(productData.price) || 0,
+        imageUrl: productData.imageUrl || null
     };
     
-    console.log('Нормализованные данные:', normalizedData);
-    
-    // ДОБАВЛЯЕМ В cartProducts, ЕСЛИ ЕЩЕ НЕТ
-    const productExists = cartProducts.some(p => p.id == normalizedData.id);
-    if (!productExists) {
-        cartProducts.push({
-            id: normalizedData.id,
-            name: normalizedData.name,
-            price: normalizedData.price,
-            imageUrl: normalizedData.imageUrl
-        });
-        console.log('Товар добавлен в cartProducts:', normalizedData.name);
-    }
-    
-    // Проверяем, есть ли такой товар в корзине
-    const existingItem = items.find(i => i.productId == normalizedData.id);
-    
-    if (existingItem) {
-        // Если товар уже есть, увеличиваем количество
-        console.log('Товар уже есть в корзине, увеличиваем количество');
-        
-        // Увеличиваем количество (создаем копию)
-        const newItem = createProduct(normalizedData);
-        
-        // Обновляем скроллер
-        renderScrollItems();
-        
-        const newQuantity = items.filter(i => i.productId == normalizedData.id).length;
-        showNotification(`Товар "${normalizedData.name}" добавлен! Всего: ${newQuantity} шт.`, 'success');
-    } else {
-        // Добавляем новый товар
-        createProduct(normalizedData);
-        renderScrollItems();
-        showNotification(`Товар "${normalizedData.name}" добавлен в корзину!`, 'success');
-    }
-    
-    return true;
+    // Отправляем запрос на добавление 1 единицы
+    fetch('/ajax/add_to_cart.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `action=add&product_id=${normalizedData.id}&quantity=1`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Добавляем в физическую корзину 1 товар
+            createProduct(normalizedData);
+            
+            // Обновляем cartProducts если нужно
+            const productExists = cartProducts.some(p => p.id == normalizedData.id);
+            if (!productExists) {
+                cartProducts.push(normalizedData);
+            }
+            
+            renderScrollItems();
+            updateBasketStats();
+            showNotification(`+1 ${normalizedData.name}`, 'success');
+        } else {
+            showNotification('Ошибка добавления', 'error');
+        }
+    });
 };
 
 // Альтернативный способ добавления (для совместимости с разными форматами вызова)
@@ -2207,41 +2208,75 @@ window.addToCart = function(productId, productName, productPrice, productImage) 
 
 function loadCartFromBitrix() {
     console.log('Загрузка корзины из Битрикса...');
+    
     fetch('/ajax/add_to_cart.php?action=get_full&t=' + Date.now())
         .then(response => response.json())
         .then(data => {
             console.log('Ответ от сервера (get_full):', data);
+            
             if (data.success && data.items && data.items.length > 0) {
                 console.log('Найдено товаров в корзине Битрикса:', data.items.length);
+                
+                // Очищаем текущую корзину
+                document.querySelectorAll('.product-item').forEach(el => el.remove());
+                window.items = [];
+                window.cartProducts = [];
+                window.totalPrice = 0;
+                
                 data.items.forEach(item => {
-                    // Проверяем, нет ли уже такого товара в физической корзине
-                    const exists = items.some(i => i.productId == item.PRODUCT_ID);
-                    if (!exists) {
-                        console.log('Добавляем товар из Битрикса:', item.NAME);
-                        
-                        // Добавляем в cartProducts если нет
-                        const productExists = cartProducts.some(p => p.id == item.PRODUCT_ID);
-                        if (!productExists) {
-                            cartProducts.push({
-                                id: item.PRODUCT_ID,
-                                name: item.NAME,
-                                price: item.PRICE,
-                                imageUrl: item.IMAGE
+                    // Пропускаем мусор
+                    if (!item.NAME || item.NAME.trim() === '' || item.PRICE === 0) {
+                        console.log('⚠️ Пропускаем мусор:', item);
+                        return;
+                    }
+                    
+                    console.log(`Загружаем: ${item.NAME}, кол-во: ${item.QUANTITY}, цена: ${item.PRICE}`);
+                    
+                    // Получаем картинку товара
+                    let imageUrl = null;
+                    if (item.IMAGE) {
+                        imageUrl = item.IMAGE;
+                    } else {
+                        // Если нет картинки в ответе, пробуем получить отдельно
+                        fetch(`/ajax/get_product_image.php?id=${item.PRODUCT_ID}`)
+                            .then(r => r.json())
+                            .then(imgData => {
+                                if (imgData.image) {
+                                    // Обновляем картинку у всех товаров этого типа
+                                    items.forEach(i => {
+                                        if (i.productId == item.PRODUCT_ID && i.element) {
+                                            const img = i.element.querySelector('img');
+                                            if (img) img.src = imgData.image;
+                                        }
+                                    });
+                                }
                             });
-                        }
-                        
-                        // Добавляем каждый товар отдельно (по количеству)
-                        for (let i = 0; i < item.QUANTITY; i++) {
-                            createProduct({
-                                id: item.PRODUCT_ID,
-                                name: item.NAME,
-                                price: item.PRICE,
-                                imageUrl: item.IMAGE
-                            });
-                        }
+                    }
+                    
+                    // Добавляем в cartProducts
+                    const productExists = cartProducts.some(p => p.id == item.PRODUCT_ID);
+                    if (!productExists) {
+                        cartProducts.push({
+                            id: item.PRODUCT_ID,
+                            name: item.NAME,
+                            price: item.PRICE,
+                            imageUrl: imageUrl
+                        });
+                    }
+                    
+                    // Добавляем товары в физическую корзину
+                    for (let i = 0; i < item.QUANTITY; i++) {
+                        createProduct({
+                            id: item.PRODUCT_ID,
+                            name: item.NAME,
+                            price: item.PRICE,
+                            imageUrl: imageUrl
+                        });
                     }
                 });
+                
                 renderScrollItems();
+                updateBasketStats();
             } else {
                 console.log('Корзина Битрикса пуста');
             }
@@ -2262,11 +2297,11 @@ function updateScreenBottom() {
 function loadPendingCartItems() {
     const pendingItems = JSON.parse(localStorage.getItem('pending_cart_items') || '[]');
     
+    console.log('loadPendingCartItems - найдено товаров:', pendingItems.length);
+    
     if (pendingItems.length > 0) {
-        console.log('📦 Найдены товары в localStorage:', pendingItems.length);
-        
-        // Загружаем каждый товар
         pendingItems.forEach(item => {
+            console.log('Товар из localStorage:', item.name);
             // Проверяем, нет ли уже такого товара в корзине
             const exists = items.some(i => i.productId == item.id);
             if (!exists) {
@@ -2338,6 +2373,38 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
+}
+
+// Функция для удаления всех мусорных товаров из корзины Битрикса
+function cleanBitrixCart() {
+    console.log('🧹 Очистка мусорных товаров...');
+    
+    fetch('/ajax/add_to_cart.php?action=get_full&t=' + Date.now())
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.items) {
+                const corruptedItems = data.items.filter(item => !item.NAME || item.NAME.trim() === '' || item.PRICE === 0);
+                
+                if (corruptedItems.length > 0) {
+                    console.log(`Найдено ${corruptedItems.length} мусорных товаров`);
+                    
+                    let deletePromises = corruptedItems.map(item => {
+                        return fetch('/ajax/add_to_cart.php', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                            body: `action=remove&product_id=${item.PRODUCT_ID}`
+                        });
+                    });
+                    
+                    Promise.all(deletePromises).then(() => {
+                        console.log('✅ Мусорные товары удалены');
+                        location.reload();
+                    });
+                } else {
+                    console.log('Мусорных товаров не найдено');
+                }
+            }
+        });
 }
 </script>
 
