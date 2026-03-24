@@ -109,6 +109,22 @@ if (!$iblockId) {
     return;
 }
 
+$productId = intval($_GET['ID']);
+if ($productId > 0) {
+    // Увеличиваем счетчик просмотров
+    ?>
+    <script>
+        fetch('/ajax/update_views.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'product_id=<?= $productId ?>'
+        });
+    </script>
+    <?php
+}
+
 // Получаем данные товара
 $arSelect = array(
     "ID",
@@ -1924,7 +1940,7 @@ $isFavorite = in_array($elementId, $favorites);
 <style>
     body {
         margin-top: 0 !important;
-        padding-top: 200px !important;
+        padding-top: 186px !important;
     }
 </style>
 <?endif?>
@@ -1933,7 +1949,7 @@ $isFavorite = in_array($elementId, $favorites);
 <style>
     body {
         margin-top: 0 !important;
-        padding-top: 160px !important;
+        padding-top: 147px !important;
     }
 </style>
 <?endif?>

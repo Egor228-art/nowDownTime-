@@ -26,6 +26,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.updateCartCounter) {
         window.updateCartCounter();
     }
+
+    loadPopularProducts();
 });
 
 // Обновляем при возвращении на страницу
@@ -640,4 +642,76 @@ function loadRegisterForm() {
             </div>
         `;
     });
+
+    function loadPopularProducts() {
+        const grid = document.getElementById('popularGamesGrid');
+        if (!grid) return;
+        
+        fetch('/ajax/get_popular_products.php')
+            .then(response => response.json())
+            .then(products => {
+                if (products.error) {
+                    console.error(products.error);
+                    grid.innerHTML = '<div class="alert alert-info">Нет данных о популярных товарах</div>';
+                    return;
+                }
+                
+                if (products.length === 0) {
+                    grid.innerHTML = '<div class="alert alert-info">Популярные товары появятся после просмотров</div>';
+                    return;
+                }
+                
+                let html = '';
+                products.forEach(product => {
+                    html += `
+                        <div class="game-card" onclick="window.location='${product.url}'">
+                            <div class="game-image">
+                                ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '<i class="fas fa-dragon"></i>'}
+                                ${product.badge}
+                            </div>
+                            <div class="game-info">
+                                <div class="game-category">${product.category || 'Настольная игра'}</div>
+                                <h3>${product.name}</h3>
+                                <div class="game-meta">
+                                    <span><i class="fas fa-user-friends"></i> ${product.players_count} игр.</span>
+                                    <span><i class="fas fa-clock"></i> ${product.game_time} мин</span>
+                                </div>
+                                <div class="game-price">
+                                    <span class="price">${product.price}</span>
+                                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                grid.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки популярных товаров:', error);
+                grid.innerHTML = '<div class="alert alert-danger">Ошибка загрузки товаров</div>';
+            });
+    }
+
+    // Простое уведомление
+    function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
 }

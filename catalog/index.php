@@ -437,7 +437,7 @@ $APPLICATION->SetTitle($currentSectionName);
                                 
                                 <div class="product-footer">
                                     <div class="product-price"><?= htmlspecialchars($product['price']) ?></div>
-                                    <button class="product-cart" onclick="event.stopPropagation(); addToCart(<?= $product['id'] ?>)">
+                                    <button class="product-cart" onclick="event.stopPropagation(); addToCart(this, <?= $product['id'] ?>)">
                                         <i class="fas fa-shopping-cart"></i>
                                     </button>
                                 </div>
@@ -594,6 +594,30 @@ $APPLICATION->SetTitle($currentSectionName);
         const horizontalNav = document.getElementById('horizontalNav');
         const backBtn = document.getElementById('backHorizontalNav');
         const filterToggle = document.getElementById('filterToggle');
+        const urlParams = new URLSearchParams(window.location.search);
+        const timeFilter = urlParams.get('filter_time');
+
+        if (timeFilter === '0-30') {
+            // Ждем загрузки всех элементов
+            setTimeout(function() {
+                // Находим и активируем чекбокс "до 30 мин" в правой панели
+                const timeCheckbox = document.querySelector('.catalog-sidebar.right-sidebar .filter-checkbox[data-filter="time"][value="0-30"]');
+                if (timeCheckbox) {
+                    timeCheckbox.checked = true;
+                    
+                    // Также активируем в модальном окне (для мобильных)
+                    const modalCheckbox = document.querySelector('.filter-modal .filter-checkbox[data-filter="time"][value="0-30"]');
+                    if (modalCheckbox) {
+                        modalCheckbox.checked = true;
+                    }
+                    
+                    // Применяем фильтры
+                    if (typeof applySidebarFilters === 'function') {
+                        applySidebarFilters();
+                    }
+                }
+            }, 500);
+        }
         
         // Раскрытие подразделов
         document.querySelectorAll('.toggle-children').forEach(button => {
@@ -993,7 +1017,7 @@ $APPLICATION->SetTitle($currentSectionName);
                         
                         <div class="product-footer">
                             <div class="product-price">${product.price}</div>
-                            <button class="product-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
+                            <button class="product-cart" onclick="event.stopPropagation(); addToCart(this, <?= $product['id'] ?>)">
                                 <i class="fas fa-shopping-cart"></i>
                             </button>
                         </div>
@@ -1032,27 +1056,129 @@ $APPLICATION->SetTitle($currentSectionName);
         }
     }
 
-    function addToCart(productId, quantity = 1) {
-        console.log('🟡 Добавляем товар:', productId, 'количество:', quantity);
+function addToCart(button, productId, quantity = 1) {
+    console.log('🟡 Добавляем товар в корзину:', productId, 'количество:', quantity);
+    
+    // Получаем данные товара из карточки
+    const productCard = button.closest('.product-card');
+    let productName = '';
+    let productPrice = 0;
+    let productImage = '';
+    
+    if (productCard) {
+        const titleEl = productCard.querySelector('.product-title');
+        if (titleEl) productName = titleEl.textContent.trim();
         
-        fetch('/ajax/add_to_cart.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'action=add&product_id=' + productId + '&quantity=' + quantity
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('🟢 Ответ от сервера:', data);
-            
-            if (data.success) {
-                if (window.updateCartCounter) {
-                    window.updateCartCounter();
-                }
-            }
-        });
+        const priceEl = productCard.querySelector('.product-price');
+        if (priceEl) {
+            const priceText = priceEl.textContent.trim();
+            productPrice = parseFloat(priceText.replace(/[^\d]/g, '')) || 0;
+        }
+        
+        const imgEl = productCard.querySelector('.product-image img');
+        if (imgEl) productImage = imgEl.src;
     }
+    
+    console.log('Данные товара из карточки:', { productName, productPrice, productImage });
+    
+    // Отправляем запрос в стандартную корзину Битрикса
+    fetch('/ajax/add_to_cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=add&product_id=' + productId + '&quantity=' + quantity
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('🟢 Ответ от сервера:', data);
+        
+        if (data.success) {
+            showCartNotification('Товар добавлен в корзину!', 'success');
+            
+            // СОХРАНЯЕМ ТОВАР В localStorage ДЛЯ СИНХРОНИЗАЦИИ
+            const cartItem = {
+                id: productId,
+                name: productName,
+                price: productPrice,
+                imageUrl: productImage,
+                timestamp: Date.now()
+            };
+            
+            // Получаем текущие товары из localStorage
+            let pendingItems = JSON.parse(localStorage.getItem('pending_cart_items') || '[]');
+            pendingItems.push(cartItem);
+            localStorage.setItem('pending_cart_items', JSON.stringify(pendingItems));
+            
+            console.log('✅ Товар сохранен в localStorage для синхронизации');
+            
+            // Обновляем счетчик в шапке
+            if (window.updateCartCounter) {
+                window.updateCartCounter();
+            }
+        } else {
+            console.error('Ошибка добавления в корзину:', data);
+            showCartNotification('Ошибка добавления товара', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка запроса:', error);
+        showCartNotification('Ошибка соединения', 'error');
+    });
+}
+
+function showCartNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = 'cart-notification-temp';
+    notification.innerHTML = `
+        <div style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#27ae60' : '#e74c3c'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            z-index: 10001;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-size: 14px;
+        ">
+            <i class="fas fa-shopping-cart"></i> ${message}
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Добавляем анимации, если их нет
+if (!document.querySelector('#cart-notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'cart-notification-styles';
+    style.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOutRight {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+}
 
     <?php
     function renderTree($tree, $activeSectionId = 0, $path = array(), $level = 1) {

@@ -11,6 +11,7 @@ ini_set('display_errors', 1);?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="bitrix_sessid" content="<?= bitrix_sessid() ?>">
     <title>nowDownTime+ — магазин настольных игр</title>
     <!-- Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,7 +23,7 @@ ini_set('display_errors', 1);?>
     <style>
         body {
             margin-top: 0 !important;
-            padding-top: 38px !important;
+            padding-top: 26px !important;
         }
     </style>
     <?endif?>
@@ -30,7 +31,7 @@ ini_set('display_errors', 1);?>
     <?if ($USER->IsAuthorized()):?>
     <style>
         body {
-            margin-top: 0 !important;
+            margin-top: -13px !important;
             padding-top: 0 !important;
         }
     </style>
@@ -72,7 +73,8 @@ ini_set('display_errors', 1);?>
                             <a href="/personal/order/" class="profile-menu-item"><i class="fas fa-box"></i> Мои заказы</a>
                             <a href="/personal/favorites/"><i class="fas fa-heart"></i> Избранное</a>
                             <div class="dropdown-divider"></div>
-                            <a href="/?logout=yes&<?=bitrix_sessid_get()?>" class="logout-link"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                            <a href="javascript:void(0)" onclick="logoutUser()" class="logout-link"><i class="fas fa-sign-out-alt"></i> Выйти</a>
+                            <!-- href="/?logout=yes&<?=bitrix_sessid_get()?>"-->
                         </div>
                     </div>
                 <?else:?>
@@ -95,12 +97,12 @@ ini_set('display_errors', 1);?>
     <div class="nav-header">
         <div class="container">
             <ul class="nav-menu">
-                <li><a href="#"><i class="fas fa-dice-d20"></i> D&D</a></li>
-                <li><a href="#"><i class="fas fa-chess-board"></i> Настольные игры</a></li>
-                <li><a href="#"><i class="fas fa-puzzle-piece"></i> Головоломки</a></li>
-                <li><a href="#"><i class="fas fa-users"></i> Для компаний</a></li>
-                <li><a href="#"><i class="fas fa-child"></i> Детям</a></li>
-                <li><a href="#" class="highlight"><i class="fas fa-gift"></i> Акции</a></li>
+                <li><a href="/catalog/?SECTION_ID=17"><i class="fas fa-dice-d20"></i> D&D</a></li>
+                <li><a href="/catalog/?SECTION_ID=16"><i class="fas fa-chess-board"></i> Настольные игры</a></li>
+                <li><a href="/catalog/?SECTION_ID=19"><i class="fas fa-puzzle-piece"></i> Головоломки</a></li>
+                <li><a href="/catalog/?SECTION_ID=20"><i class="fas fa-users"></i> Для компаний</a></li>
+                <li><a href="/catalog/?SECTION_ID=21"><i class="fas fa-child"></i> Детям</a></li>
+                <li><a href="/catalog/?SECTION_ID=18"><i class="fas fa-chess-knight"></i> Стратегии</a></li>
             </ul>
         </div>
     </div>
@@ -168,22 +170,47 @@ ini_set('display_errors', 1);?>
     <div class="modal-backdrop" id="modalBackdrop" onclick="closeAllModals()"></div>
     <script src="<?=SITE_TEMPLATE_PATH?>/javascript.js"></script>
     <script>
-window.updateCartCounter = function(force = false) {    
-    // Если вызвано принудительно, сначала проверим, есть ли счетчик в DOM
-    if (force) {
-        let counters = document.querySelectorAll('.cart-counter');
+    function logoutUser() {
+        // Получаем текущий URL страницы
+        var currentUrl = window.location.href;
         
-        // Если счетчиков нет, но они должны быть — создадим временный
-        if (counters.length === 0) {
-            const cartLink = document.querySelector('a[href*="cart"]');
-            if (cartLink) {
-                const newCounter = document.createElement('span');
-                newCounter.className = 'cart-counter';
-                newCounter.style.display = 'none';
-                cartLink.appendChild(newCounter);
+        // Получаем sessid для Битрикса
+        var sessid = '';
+        
+        // Пытаемся получить sessid из мета-тега или глобальной переменной
+        if (window.bitrix_sessid) {
+            sessid = window.bitrix_sessid;
+        } else {
+            // Альтернативный способ получить sessid
+            var sessidMeta = document.querySelector('meta[name="bitrix_sessid"]');
+            if (sessidMeta) {
+                sessid = sessidMeta.content;
             }
         }
+        
+        // Формируем URL для выхода с сохранением текущей страницы
+        var logoutUrl = '/?logout=yes&sessid=' + sessid + '&backurl=' + encodeURIComponent(currentUrl);
+        
+        // Выполняем выход и перенаправление
+        window.location.href = logoutUrl;
     }
+
+    window.updateCartCounter = function(force = false) {    
+        // Если вызвано принудительно, сначала проверим, есть ли счетчик в DOM
+        if (force) {
+            let counters = document.querySelectorAll('.cart-counter');
+            
+            // Если счетчиков нет, но они должны быть — создадим временный
+            if (counters.length === 0) {
+                const cartLink = document.querySelector('a[href*="cart"]');
+                if (cartLink) {
+                    const newCounter = document.createElement('span');
+                    newCounter.className = 'cart-counter';
+                    newCounter.style.display = 'none';
+                    cartLink.appendChild(newCounter);
+                }
+            }
+        }
     
     fetch('/ajax/add_to_cart.php?action=get&t=' + Date.now()) // Добавим timestamp чтобы избежать кеша
         .then(response => response.json())

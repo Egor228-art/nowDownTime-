@@ -22,7 +22,7 @@
                         <a href="#"><i class="fab fa-vk"></i></a>
                         <a href="#"><i class="fab fa-telegram-plane"></i></a>
                         <a href="#"><i class="fab fa-youtube"></i></a>
-                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a class="Discord" href="#"><i class="fab fa-discord"></i></a>
                     </div>
                 </div>
 
@@ -30,12 +30,12 @@
                 <div class="footer-col" style="content: none;">
                     <h4>Каталог</h4>
                     <ul>
-                        <li><a href="#"><i class="fas fa-dice-d20"></i> D&D</a></li>
-                        <li><a href="#"><i class="fas fa-chess-board"></i> Настольные игры</a></li>
-                        <li><a href="#"><i class="fas fa-puzzle-piece"></i> Головоломки</a></li>
-                        <li><a href="#"><i class="fas fa-users"></i> Для компаний</a></li>
-                        <li><a href="#"><i class="fas fa-child"></i> Детям</a></li>
-                        <li><a href="#"><i class="fas fa-gift"></i> Подарочные наборы</a></li>
+                        <li><a href="/catalog/?SECTION_ID=17"><i class="fas fa-dice-d20"></i> D&D</a></li>
+                        <li><a href="/catalog/?SECTION_ID=16"><i class="fas fa-chess-board"></i> Настольные игры</a></li>
+                        <li><a href="/catalog/?SECTION_ID=19"><i class="fas fa-puzzle-piece"></i> Головоломки</a></li>
+                        <li><a href="/catalog/?SECTION_ID=20"><i class="fas fa-users"></i> Для компаний</a></li>
+                        <li><a href="/catalog/?SECTION_ID=21"><i class="fas fa-child"></i> Детям</a></li>
+                        <li><a style="cursor: pointer;" onclick="location.href='/catalog/?filter_time=0-30'"><i class="fas fa-clock"></i> Короткие</a></li>
                     </ul>
                 </div>
 

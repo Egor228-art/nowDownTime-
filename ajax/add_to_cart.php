@@ -1,247 +1,126 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_before.php");
 
-// Заголовок для JSON ответа
-header('Content-Type: application/json');
+// Подключаем модули
+CModule::IncludeModule("sale");
+CModule::IncludeModule("catalog");
+CModule::IncludeModule("iblock"); // Добавляем модуль инфоблоков
 
-// Подключаем модуль инфоблоков (на всякий случай)
-if(!CModule::IncludeModule('iblock')) {
-    echo json_encode(['success' => false, 'error' => 'Модуль инфоблоков не найден']);
-    return;
-}
+$response = ['success' => false, 'message' => ''];
 
-// Функция для получения ID текущей сессии
-function getSessionId() {
-    if (!session_id()) {
-        session_start();
-    }
-    
-    if (empty($_SESSION['CART_SESSION_ID'])) {
-        $_SESSION['CART_SESSION_ID'] = session_id() . '_' . uniqid();
-    }
-    
-    return $_SESSION['CART_SESSION_ID'];
-}
-
-// Функция для получения ID пользователя (если авторизован)
-function getUserId() {
-    global $USER;
-    return $USER->IsAuthorized() ? $USER->GetID() : null;
-}
-
-// Получаем действие
 $action = $_REQUEST['action'] ?? '';
+$productId = intval($_REQUEST['product_id'] ?? 0);
+$quantity = intval($_REQUEST['quantity'] ?? 1);
+
+// Получаем ID пользователя корзины
+$fuserId = CSaleBasket::GetBasketUserID();
 
 switch ($action) {
     case 'add':
-        // Добавление товара в корзину
-        $productId = intval($_POST['product_id'] ?? 0);
-        $quantity = intval($_POST['quantity'] ?? 1);
-        
-        if ($productId <= 0) {
-            echo json_encode(['success' => false, 'error' => 'Неверный ID товара']);
-            return;
-        }
-        
-        if ($quantity <= 0) {
-            $quantity = 1;
-        }
-        
-        $sessionId = getSessionId();
-        $userId = getUserId();
-        
-        global $DB;
-        
-        // Проверяем, есть ли уже такой товар в корзине
-        $sql = "SELECT ID, QUANTITY FROM user_cart 
-                WHERE SESSION_ID = '".$DB->ForSql($sessionId)."' 
-                AND PRODUCT_ID = ".$productId;
-        
-        if ($userId) {
-            $sql .= " AND (USER_ID = ".$userId." OR USER_ID IS NULL)";
-        }
-        
-        $result = $DB->Query($sql);
-        
-        if ($item = $result->Fetch()) {
-            // Обновляем количество
-            $newQuantity = $item['QUANTITY'] + $quantity;
-            $DB->Update('user_cart', [
-                'QUANTITY' => $newQuantity,
-                'USER_ID' => $userId ?: 'NULL'
-            ], "WHERE ID = ".$item['ID']);
-        } else {
-            // Добавляем новый товар
-            $DB->Insert('user_cart', [
-                'USER_ID' => $userId ?: 'NULL',
-                'SESSION_ID' => "'".$DB->ForSql($sessionId)."'",
-                'PRODUCT_ID' => $productId,
-                'QUANTITY' => $quantity,
-                'DATE_ADDED' => "'".date('Y-m-d H:i:s')."'"
-            ]);
-        }
-        
-        echo json_encode([
-            'success' => true,
-            'message' => 'Товар добавлен в корзину',
-            'cart_count' => getCartCount()
-        ]);
-        break;
-        
-    case 'update':
-        // Обновление количества товара
-        $productId = intval($_POST['product_id'] ?? 0);
-        $quantity = intval($_POST['quantity'] ?? 1);
-        
-        if ($productId <= 0) {
-            echo json_encode(['success' => false, 'error' => 'Неверный ID товара']);
-            return;
-        }
-        
-        $sessionId = getSessionId();
-        $userId = getUserId();
-        
-        global $DB;
-        
-        $sql = "UPDATE user_cart SET QUANTITY = ".$quantity;
-        
-        if ($userId) {
-            $sql .= ", USER_ID = ".$userId;
-        }
-        
-        $sql .= " WHERE SESSION_ID = '".$DB->ForSql($sessionId)."' 
-                  AND PRODUCT_ID = ".$productId;
-        
-        $DB->Query($sql);
-        
-        echo json_encode([
-            'success' => true,
-            'cart_count' => getCartCount()
-        ]);
-        break;
-        
-    case 'remove':
-        // Удаление товара из корзины
-        $productId = intval($_POST['product_id'] ?? 0);
-        
-        if ($productId <= 0) {
-            echo json_encode(['success' => false, 'error' => 'Неверный ID товара']);
-            return;
-        }
-        
-        $sessionId = getSessionId();
-        $userId = getUserId();
-        
-        global $DB;
-        
-        $sql = "DELETE FROM user_cart 
-                WHERE SESSION_ID = '".$DB->ForSql($sessionId)."' 
-                AND PRODUCT_ID = ".$productId;
-        
-        $DB->Query($sql);
-        
-        echo json_encode([
-            'success' => true,
-            'cart_count' => getCartCount()
-        ]);
-        break;
-        
-    case 'clear':
-        // Очистка корзины
-        $sessionId = getSessionId();
-        $userId = getUserId();
-        
-        global $DB;
-        
-        $sql = "DELETE FROM user_cart WHERE SESSION_ID = '".$DB->ForSql($sessionId)."'";
-        $DB->Query($sql);
-        
-        echo json_encode([
-            'success' => true,
-            'cart_count' => 0
-        ]);
-        break;
-        
-    case 'get':
-        // Получение количества товаров в корзине
-        echo json_encode([
-            'success' => true,
-            'cart_count' => getCartCount()
-        ]);
-        break;
-        
-    case 'get_full':
-        // Получение полной информации о корзине
-        $items = getCartItems();
-        $total = 0;
-        
-        // Получаем цены товаров
-        foreach ($items as &$item) {
-            $res = CIBlockElement::GetList(
+        if ($productId > 0 && $quantity > 0) {
+            // ПРОВЕРЯЕМ, СУЩЕСТВУЕТ ЛИ ТОВАР
+            $dbRes = CIBlockElement::GetList(
                 [],
-                ['IBLOCK_CODE' => 'products', 'ID' => $item['PRODUCT_ID']],
+                ['ID' => $productId, 'ACTIVE' => 'Y'],
                 false,
                 false,
-                ['ID', 'NAME', 'PROPERTY_PRICE', 'DETAIL_PICTURE']
+                ['ID', 'NAME', 'IBLOCK_ID']
             );
             
-            if ($product = $res->GetNext()) {
-                $item['NAME'] = $product['NAME'];
-                $item['PRICE'] = $product['PROPERTY_PRICE_VALUE'] ? explode('|', $product['PROPERTY_PRICE_VALUE'])[0] : 0;
-                $item['SUM'] = $item['PRICE'] * $item['QUANTITY'];
-                $item['IMAGE'] = $product['DETAIL_PICTURE'] ? CFile::GetPath($product['DETAIL_PICTURE']) : '';
+            if (!$dbRes->Fetch()) {
+                $response['message'] = 'Товар не найден в каталоге';
+                $response['error'] = "Товар с ID {$productId} не существует или неактивен";
+                echo json_encode($response);
+                exit;
+            }
+            
+            // Проверяем, есть ли уже такой товар в корзине
+            $dbBasketItems = CSaleBasket::GetList(
+                [],
+                [
+                    "PRODUCT_ID" => $productId,
+                    "FUSER_ID" => $fuserId,
+                    "LID" => SITE_ID,
+                    "ORDER_ID" => "NULL"
+                ],
+                false,
+                false,
+                ["ID", "QUANTITY"]
+            );
+            
+            if ($arItem = $dbBasketItems->Fetch()) {
+                $newQuantity = $arItem["QUANTITY"] + $quantity;
+                $result = CSaleBasket::Update($arItem["ID"], ["QUANTITY" => $newQuantity]);
+            } else {
+                // Альтернативный способ
+                $arFields = array(
+                    "PRODUCT_ID" => $productId,
+                    "PRODUCT_PRICE_ID" => 0,
+                    "PRICE" => 0, // Будет автоматически подставлена
+                    "CURRENCY" => "RUB",
+                    "QUANTITY" => $quantity,
+                    "LID" => SITE_ID,
+                    "DELAY" => "N",
+                    "CAN_BUY" => "Y",
+                    "NAME" => "", // Будет автоматически подставлена
+                    "MODULE" => "catalog",
+                    "FUSER_ID" => $fuserId,
+                    "NOTES" => "",
+                );
                 
-                if ($item['PRICE']) {
-                    $total += $item['SUM'];
+                $result = CSaleBasket::Add($arFields);
+                
+                if (!$result) {
+                    // Пробуем через стандартную функцию
+                    $result = Add2BasketByProductID($productId, $quantity);
                 }
             }
+            
+            if ($result) {
+                $response['success'] = true;
+                $response['message'] = 'Товар добавлен в корзину';
+                $response['product_id'] = $productId;
+                $response['quantity'] = $quantity;
+            } else {
+                $response['message'] = 'Ошибка добавления товара';
+                if ($ex = $GLOBALS['APPLICATION']->GetException()) {
+                    $response['error'] = $ex->GetString();
+                } else {
+                    $response['error'] = 'Неизвестная ошибка при добавлении в корзину';
+                }
+            }
+        } else {
+            $response['message'] = 'Неверные параметры товара';
+        }
+        break;
+        
+    case 'get_count':
+        $count = 0;
+        $dbBasketItems = CSaleBasket::GetList(
+            [],
+            [
+                "FUSER_ID" => $fuserId,
+                "LID" => SITE_ID,
+                "ORDER_ID" => "NULL"
+            ],
+            false,
+            false,
+            ["ID", "QUANTITY"]
+        );
+        
+        while ($arItem = $dbBasketItems->Fetch()) {
+            $count += $arItem['QUANTITY'];
         }
         
-        echo json_encode([
-            'success' => true,
-            'items' => $items,
-            'total' => $total,
-            'count' => count($items)
-        ]);
+        $response['success'] = true;
+        $response['count'] = $count;
         break;
         
     default:
-        echo json_encode(['success' => false, 'error' => 'Неизвестное действие']);
+        $response['message'] = 'Неизвестное действие';
+        break;
 }
 
-// Функция для получения количества товаров в корзине
-function getCartCount() {
-    $sessionId = getSessionId();
-    $userId = getUserId();
-    
-    global $DB;
-    
-    $sql = "SELECT SUM(QUANTITY) as CNT FROM user_cart 
-            WHERE SESSION_ID = '".$DB->ForSql($sessionId)."'";
-    
-    $result = $DB->Query($sql);
-    $row = $result->Fetch();
-    
-    return intval($row['CNT']);
-}
-
-// Функция для получения товаров в корзине
-function getCartItems() {
-    $sessionId = getSessionId();
-    $userId = getUserId();
-    
-    global $DB;
-    
-    $sql = "SELECT * FROM user_cart 
-            WHERE SESSION_ID = '".$DB->ForSql($sessionId)."'
-            ORDER BY DATE_ADDED DESC";
-    
-    $result = $DB->Query($sql);
-    $items = [];
-    
-    while ($row = $result->Fetch()) {
-        $items[] = $row;
-    }
-    
-    return $items;
-}
+header('Content-Type: application/json');
+echo json_encode($response, JSON_UNESCAPED_UNICODE);
+?>
