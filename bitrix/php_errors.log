@@ -1,0 +1,462 @@
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Страница загружена
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - User ID: 1
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - getUserData вызван для ID: 1
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - getUserData результат: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:04:09
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - POST запрос получен: Array
+(
+    [sessid] => c96b63c0e971ac0709661c0de6870202
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_CITY] => Великий Новгород
+    [UF_BIRTHDAY] => 2005-12-09
+    [NEW_PASSWORD] => 
+    [CONFIRM_PASSWORD] => 
+)
+
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - UF_BIRTHDAY из POST: 2005-12-09
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Текущее UF_BIRTHDAY
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Добавляем UF_BIRTHDAY в fields для обновления: 2005-12-09
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Fields для обновления: Array
+(
+    [UF_BIRTHDAY] => 2005-12-09
+)
+
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Выполняем Update
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Update успешен
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - getUserData вызван для ID: 1
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - getUserData результат: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:07:19
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+
+[11-Mar-2026 20:07:19 Etc/GMT-3] 2026-03-11 20:07:19 - Данные после обновления: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:07:19
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Страница загружена
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - User ID: 1
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - getUserData вызван для ID: 1
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - getUserData результат: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:07:19
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - POST запрос получен: Array
+(
+    [sessid] => c96b63c0e971ac0709661c0de6870202
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_CITY] => Великий Новгород
+    [UF_BIRTHDAY] => 2005-12-09
+    [NEW_PASSWORD] => 
+    [CONFIRM_PASSWORD] => 
+)
+
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - UF_BIRTHDAY из POST: 2005-12-09
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Текущее UF_BIRTHDAY
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Добавляем UF_BIRTHDAY в fields для обновления: 2005-12-09
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Fields для обновления: Array
+(
+    [UF_BIRTHDAY] => 2005-12-09
+)
+
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Выполняем Update
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Update успешен
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - getUserData вызван для ID: 1
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - getUserData результат: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:07:28
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+
+[11-Mar-2026 20:07:28 Etc/GMT-3] 2026-03-11 20:07:28 - Данные после обновления: Array
+(
+    [ID] => 1
+    [TIMESTAMP_X] => 11.03.2026 20:07:28
+    [LOGIN] => admin
+    [PASSWORD] => $6$rax7xBGVqiMGj2ay$DLJZMMf3dSqY27E4tpGpL8wsOuxEaJu4OQSbirZK5VbjFlo5mBEbbxeMg5tfl69XWBoriT6q.kVZ9YQ2/S9t1/
+    [CHECKWORD] => $6$F5fuQjio7IRsACbU$1WQ9Gb1o6bUZ1OjG54dD3.4uCZHf7RR72VNyyGfZU3TswkfX1OpBYhFRjEBJ/7QkxFxxWc7A9mnwrRa5faLAg1
+    [ACTIVE] => Y
+    [NAME] => Jhon
+    [LAST_NAME] => Doe
+    [EMAIL] => swustinowegor@gmail.com
+    [LAST_LOGIN] => 11.03.2026 17:36:40
+    [DATE_REGISTER] => 05.03.2026 14:10:17
+    [LID] => 
+    [PERSONAL_PROFESSION] => 
+    [PERSONAL_WWW] => 
+    [PERSONAL_ICQ] => 
+    [PERSONAL_GENDER] => 
+    [PERSONAL_BIRTHDATE] => 
+    [PERSONAL_PHOTO] => 
+    [PERSONAL_PHONE] => +7 (960) 204-82-15
+    [PERSONAL_FAX] => 
+    [PERSONAL_MOBILE] => 
+    [PERSONAL_PAGER] => 
+    [PERSONAL_STREET] => 
+    [PERSONAL_MAILBOX] => 
+    [PERSONAL_CITY] => Великий Новгород
+    [PERSONAL_STATE] => 
+    [PERSONAL_ZIP] => 
+    [PERSONAL_COUNTRY] => 
+    [PERSONAL_NOTES] => 
+    [WORK_COMPANY] => 
+    [WORK_DEPARTMENT] => 
+    [WORK_POSITION] => 
+    [WORK_WWW] => 
+    [WORK_PHONE] => 
+    [WORK_FAX] => 
+    [WORK_PAGER] => 
+    [WORK_STREET] => 
+    [WORK_MAILBOX] => 
+    [WORK_CITY] => 
+    [WORK_STATE] => 
+    [WORK_ZIP] => 
+    [WORK_COUNTRY] => 
+    [WORK_PROFILE] => 
+    [WORK_LOGO] => 
+    [WORK_NOTES] => 
+    [ADMIN_NOTES] => 
+    [STORED_HASH] => 
+    [XML_ID] => 
+    [PERSONAL_BIRTHDAY] => 
+    [EXTERNAL_AUTH_ID] => 
+    [CHECKWORD_TIME] => 2026-03-05 14:10:17
+    [SECOND_NAME] => 
+    [CONFIRM_CODE] => 
+    [LOGIN_ATTEMPTS] => 0
+    [LAST_ACTIVITY_DATE] => 
+    [AUTO_TIME_ZONE] => 
+    [TIME_ZONE] => 
+    [TIME_ZONE_OFFSET] => 
+    [TITLE] => 
+    [BX_USER_ID] => 
+    [LANGUAGE_ID] => ru
+    [BLOCKED] => N
+    [PASSWORD_EXPIRED] => N
+    [IS_ONLINE] => N
+)
+

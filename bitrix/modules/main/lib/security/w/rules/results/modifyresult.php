@@ -1,0 +1,1 @@
+<? namespace Bitrix\Main\Security\W\Rules\Results; class ModifyResult extends RuleResult{ protected $_1435147313; public function __construct($_1435147313){ $this->_1435147313= $_1435147313;}  public function getCleanValue(): mixed{ return $this->_1435147313;}}?>
