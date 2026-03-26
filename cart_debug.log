@@ -1,0 +1,24 @@
+2026-03-24 12:29:43 - === START ===
+2026-03-24 12:29:43 - POST: Array
+(
+    [lastName] => Иванов
+    [firstName] => Иван
+    [phone] => 79991234567
+    [email] => test@test.ru
+    [delivery] => pickup
+    [payment] => cash
+)
+
+2026-03-24 12:29:43 - Данные: lastName=Иванов, firstName=Иван, phone=79991234567, email=test@test.ru
+2026-03-24 12:29:43 - User ID: 1, Session ID: cnpBM4Fu37fMiw3WS7pbrg8t1PiVr9lp
+2026-03-24 12:29:43 - SQL: SELECT * FROM user_cart WHERE USER_ID = 1
+2026-03-24 12:29:43 - Row found: Array
+(
+    [ID] => 22
+    [USER_ID] => 1
+    [SESSION_ID] => Us6GnS8fqbmnGkkaO8htgp1rSRyRilxi_69c248fadb929
+    [PRODUCT_ID] => 320
+    [QUANTITY] => 1
+    [DATE_ADDED] => 2026-03-24 11:59:12
+)
+

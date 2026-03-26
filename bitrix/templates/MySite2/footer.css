@@ -1,0 +1,249 @@
+footer {
+    background: #0f172a;
+    color: white;
+    padding: 80px 0 20px;
+    position: relative;
+    border-top: 3px solid;
+    border-image: repeating-linear-gradient(
+        45deg,
+        #0f172a,
+        #0f172a,
+        #0f172a,
+        #0f172a
+    ) 30;
+    border-radius: 0 0 0;
+    
+    /* ТРЕУГОЛЬНЫЙ ВЫРЕЗ СВЕРХУ */
+    clip-path: polygon(
+        0% 40px,
+        20% 0%,
+        40% 40px,
+        60% 0%,
+        80% 40px,
+        100% 0%,
+        100% 100%,
+        0% 100%
+    );
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Декоративные уголки */
+.footer-col:first-child::before {
+    content: '⚔️';
+    position: absolute;
+    top: -40px;
+    left: -20px;
+    font-size: 24px;
+    opacity: 0.3;
+    transform: rotate(-15deg);
+    z-index: 3;
+}
+
+.footer-col:last-child::after {
+    content: '🏆';
+    position: absolute;
+    bottom: -30px;
+    right: -20px;
+    font-size: 32px;
+    opacity: 0.3;
+    transform: rotate(15deg);
+}
+
+.footer-col .logo {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.logo img {
+    width: 350px;
+    height: 100px;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.2));
+    transition: filter 0.3s ease;
+}
+
+.logo:hover img {
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+}
+
+.footer-col p {
+    color: #a0afc0;
+    margin-bottom: 25px;
+    line-height: 1.7;
+    position: relative;
+    padding-left: 15px;
+    border-left: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Соцсети как игральные кости */
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    color: white;
+    background: #1e2a3a;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-decoration: none;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    font-size: 18px;
+    position: relative;
+    box-shadow: 0 4px 0 #0a0f1a;
+}
+
+.social-links a::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-4px);
+    background: #ffd9003d;
+    color: #0f172a;
+    box-shadow: 0 6px 0 #a67c00, 0 10px 20px rgba(255, 215, 0, 0.2);
+}
+
+.social-links a:hover::before {
+    opacity: 1;
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #FFD700;
+    padding-bottom: 8px;
+}
+
+.footer-col h4:after {
+    background: none;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 25px;
+}
+
+/* УБИРАЕМ КУБИКИ У ВСЕХ li ПО УМОЛЧАНИЮ */
+.footer-col ul li::before {
+    content: '';  /* Убрали кубик */
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 14px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* ДОБАВЛЯЕМ КУБИКИ ТОЛЬКО ДЛЯ ПЕРВОЙ КОЛОНКИ */
+.footer-col:first-child ul li::before {
+    content: '🎲';  /* Кубики только в первой колонке */
+}
+
+.footer-col ul a {
+    color: #a0afc0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.footer-col ul a:hover {
+    color: #FFD700;
+    transform: translateX(5px);
+}
+
+.footer-col i {
+    font-size: 20px;
+    color: #FFD700;
+    margin-right: 10px;
+    filter: drop-shadow(0 2px 5px rgba(255, 215, 0, 0.2));
+}
+
+.copyright {
+    text-align: center;
+    padding: 30px 0 0;
+    border-top: 2px dashed rgba(255, 215, 0, 0.2);
+    margin-top: 20px;
+    color: #a0afc0;
+    position: relative;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.copyright::before,
+.copyright::after {
+    content: '⚔️';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.3;
+}
+
+.copyright::before {
+    left: 20%;
+    content: '⚔️';
+}
+
+.copyright::after {
+    right: 20%;
+    content: '🛡️';
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    footer {
+        clip-path: polygon(
+            0% 20px,
+            20% 0%,
+            40% 20px,
+            60% 0%,
+            80% 20px,
+            100% 0%,
+            100% 100%,
+            0% 100%
+        );
+        padding: 60px 0 20px;
+    }
+    
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .copyright::before,
+    .copyright::after {
+        display: none;
+    }
+}

@@ -715,3 +715,23 @@ function loadRegisterForm() {
         }, 3000);
     }
 }
+
+// Функция обновления счетчика избранного
+function updateFavoriteCount() {
+    fetch('/ajax/toggle_favorite.php?action=get')
+        .then(response => response.json())
+        .then(data => {
+            const countElement = document.getElementById('favoriteCount');
+            if (countElement) {
+                const count = data.count || 0;
+                countElement.textContent = count;
+                countElement.style.display = count > 0 ? 'inline-flex' : 'none';
+            }
+        })
+        .catch(error => console.error('Ошибка обновления счетчика:', error));
+}
+
+// Вызываем при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    updateFavoriteCount();
+});

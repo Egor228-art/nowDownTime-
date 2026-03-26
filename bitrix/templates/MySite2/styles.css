@@ -952,6 +952,30 @@ body.bx-panel-minimized {
     font-size: 24px;
 }
 
+.favorite-link {
+    position: relative;
+    color: #2c3e50;
+    font-size: 20px;
+    transition: all 0.3s;
+}
+
+.favorite-link:hover {
+    color: #e74c3c;
+}
+
+.favorite-link .counter {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background: #e74c3c;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
 /* Стили для уведомлений */
 .notification {
     position: fixed;

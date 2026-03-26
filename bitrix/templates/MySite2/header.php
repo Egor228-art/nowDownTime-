@@ -71,7 +71,7 @@ ini_set('display_errors', 1);?>
                                 <span class="cart-counter" style="display: none;">0</span>
                             </a>
                             <a href="/personal/order/" class="profile-menu-item"><i class="fas fa-box"></i> Мои заказы</a>
-                            <a href="/personal/favorites/"><i class="fas fa-heart"></i> Избранное</a>
+                            <a href="/personal/favorites/"><i class="fas fa-heart"></i> Избранное <span id="favorite-counter" class="counter" style="display: none;">0</span></a>
                             <div class="dropdown-divider"></div>
                             <a href="javascript:void(0)" onclick="logoutUser()" class="logout-link"><i class="fas fa-sign-out-alt"></i> Выйти</a>
                             <!-- href="/?logout=yes&<?=bitrix_sessid_get()?>"-->
